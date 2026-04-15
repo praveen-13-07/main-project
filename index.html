@@ -1,118 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>College Portal</title>
-
-<link rel="stylesheet" href="stylee.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sastra College – Placement Portal</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<div id="loginpage">
+<div class="login-page">
 
-    <div class="loginoptions" id="loginoptions">
-        <h2>College Portal</h2>
-        <button type="button" class="studentbtn" onclick="showStudentLogin()">Student</button>
-        <button type="button" class="companybtn" onclick="showCompanyLogin()">Company</button>
+  <div class="login-container">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <div class="logo-icon">🎓</div>
+      <h1>SASTRA University</h1>
+      <p>Placement Portal</p>
     </div>
 
-    <div class="studentlogin" id="studentlogin" style="display:none;">
-        <h2>Student Login</h2>
-        <div id="student_login_msg" class="form-msg"></div>
+    <!-- Login Card -->
+    <div class="login-card">
 
-        <label>Username :</label>
-        <input type="text" id="student_login_username" placeholder="Username">
+      <!-- Toggle -->
+      <div class="login-toggle">
+        <div class="toggle-btn active" id="studentTab" onclick="switchMode('student')">🎓 Student</div>
+        <div class="toggle-btn" id="companyTab" onclick="switchMode('company')">🏢 Company</div>
+      </div>
 
-        <label>Password :</label>
-        <input type="password" id="student_login_password" placeholder="Password">
+      <!-- Student Form -->
+      <form class="login-form" id="studentForm" onsubmit="handleLogin(event, 'student')">
 
-        <button type="button" class="loginbtn" onclick="studentLogin()">Login</button>
-        <button type="button" class="backbtn" onclick="showOptions()">Back</button>
+        <div id="registerFields" style="display:none; flex-direction:column; gap:20px;">
+          <div class="form-group">
+            <label>Full Name</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" id="regName" placeholder="e.g. Arun Kumar"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🏛️</span>
+              <input type="text" id="regDept" placeholder="e.g. B.Tech CSE"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Register Number</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🪪</span>
+              <input type="text" id="regRollNo" placeholder="e.g. 121003567"/>
+            </div>
+          </div>
+        </div>
 
-        <p>
-            Don't have an account?
-            <a href="#" onclick="showStudentRegister()">Register here</a>
-        </p>
+        <div class="form-group">
+          <label>Email Address</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📧</span>
+            <input type="email" id="studentEmail" placeholder="you@sastra.edu" required/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="studentPassword" placeholder="••••••••" required/>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-accent" id="studentSubmitBtn">Login as Student →</button>
+      </form>
+
+      <!-- Company Form -->
+      <form class="login-form" id="companyForm" style="display:none;" onsubmit="handleLogin(event, 'company')">
+
+        <div id="companyRegFields" style="display:none; flex-direction:column; gap:20px;">
+          <div class="form-group">
+            <label>Company Name</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🏢</span>
+              <input type="text" id="compRegName" placeholder="e.g. Infosys Limited"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Industry</label>
+            <div class="input-wrapper">
+              <span class="input-icon">⚙️</span>
+              <input type="text" id="compRegIndustry" placeholder="e.g. Information Technology"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Company Email</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📧</span>
+            <input type="email" id="companyEmail" placeholder="hr@company.com" required/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="companyPassword" placeholder="••••••••" required/>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-accent" id="companySubmitBtn">Login as Company →</button>
+      </form>
+
+      <div class="login-footer">
+        <span id="footerText">Don't have an account?</span>
+        <a href="#" id="toggleFormLink" onclick="toggleRegister(event)"> Register here</a>
+      </div>
+
     </div>
-
-    <div class="companylogin" id="companylogin" style="display:none;">
-        <h2>Company Login</h2>
-        <div id="company_login_msg" class="form-msg"></div>
-
-        <label>Company Name :</label>
-        <input type="text" id="company_login_name" placeholder="Company Name">
-
-        <label>Password :</label>
-        <input type="password" id="company_login_password" placeholder="Password">
-
-        <button type="button" class="loginbtn" onclick="companyLogin()">Login</button>
-        <button type="button" class="backbtn" onclick="showOptions()">Back</button>
-
-        <p>
-            Don't have an account?
-            <a href="#" onclick="showCompanyRegister()">Register here</a>
-        </p>
-    </div>
-
-    <div class="studentregister" id="studentregister" style="display:none;">
-        <h2>Student Registration</h2>
-        <div id="student_reg_msg" class="form-msg"></div>
-
-        <label>Full Name :</label>
-        <input type="text" id="student_reg_fullname" placeholder="Full Name">
-
-        <label>Department :</label>
-        <input type="text" id="student_reg_department" placeholder="Department">
-
-        <label>Phone Number :</label>
-        <input type="number" id="student_reg_phone" placeholder="Phone Number">
-
-        <label>Username :</label>
-        <input type="text" id="student_reg_username" placeholder="Username">
-
-        <label>Email :</label>
-        <input type="email" id="student_reg_email" placeholder="Email">
-
-        <label>Password :</label>
-        <input type="password" id="student_reg_password" placeholder="Password">
-
-        <button type="button" class="registerbtn" onclick="studentRegister()">Create Student Account</button>
-        <button type="button" class="backbtn" onclick="showOptions()">Back</button>
-
-        <p>
-            Already have an account?
-            <a href="#" onclick="showStudentLogin()">Login here</a>
-        </p>
-    </div>
-
-    <div class="companyregister" id="companyregister" style="display:none;">
-        <h2>Company Registration</h2>
-        <div id="company_reg_msg" class="form-msg"></div>
-
-        <label>Company Name :</label>
-        <input type="text" id="company_reg_name" placeholder="Company Name">
-
-        <label>Email :</label>
-        <input type="email" id="company_reg_email" placeholder="Email">
-
-        <label>Password :</label>
-        <input type="password" id="company_reg_password" placeholder="Password">
-
-        <button type="button" class="registerbtn" onclick="companyRegister()">Register Company <i class="fa-solid fa-arrow-right"></i></button>
-        <button type="button" class="backbtn" onclick="showOptions()">Back</button>
-
-        <p>
-            Already have an account?
-            <a href="#" onclick="showCompanyLogin()">Login here</a>
-        </p>
-    </div>
+  </div>
 
 </div>
 
-<script src="stylee.js"></script>
+<div id="toast-container"></div>
+
+<script>
+  // ===== STATE =====
+  let currentMode = 'student';
+  let isRegister = false;
+
+  // ===== SWITCH STUDENT / COMPANY =====
+  function switchMode(mode) {
+    currentMode = mode;
+    document.getElementById('studentTab').classList.toggle('active', mode === 'student');
+    document.getElementById('companyTab').classList.toggle('active', mode === 'company');
+    document.getElementById('studentForm').style.display  = mode === 'student' ? 'flex' : 'none';
+    document.getElementById('companyForm').style.display  = mode === 'company' ? 'flex' : 'none';
+    // Reset register state
+    isRegister = false;
+    updateFormUI();
+  }
+
+  // ===== TOGGLE REGISTER / LOGIN =====
+  function toggleRegister(e) {
+    e.preventDefault();
+    isRegister = !isRegister;
+    updateFormUI();
+  }
+
+  function updateFormUI() {
+    const regFields    = document.getElementById('registerFields');
+    const compRegFields = document.getElementById('companyRegFields');
+    const footerText   = document.getElementById('footerText');
+    const link         = document.getElementById('toggleFormLink');
+    const studentBtn   = document.getElementById('studentSubmitBtn');
+    const companyBtn   = document.getElementById('companySubmitBtn');
+
+    if (isRegister) {
+      regFields.style.display     = 'flex';
+      compRegFields.style.display = 'flex';
+      footerText.textContent      = 'Already have an account?';
+      link.textContent            = ' Login here';
+      studentBtn.textContent      = 'Create Student Account →';
+      companyBtn.textContent      = 'Register Company →';
+    } else {
+      regFields.style.display     = 'none';
+      compRegFields.style.display = 'none';
+      footerText.textContent      = "Don't have an account?";
+      link.textContent            = ' Register here';
+      studentBtn.textContent      = 'Login as Student →';
+      companyBtn.textContent      = 'Login as Company →';
+    }
+  }
+
+  // ===== HANDLE LOGIN / REGISTER =====
+  function handleLogin(e, type) {
+    e.preventDefault();
+
+    if (type === 'student') {
+      const email = document.getElementById('studentEmail').value;
+      const pass  = document.getElementById('studentPassword').value;
+
+      if (isRegister) {
+        const name   = document.getElementById('regName').value;
+        const dept   = document.getElementById('regDept').value;
+        const rollNo = document.getElementById('regRollNo').value;
+
+        if (!name || !dept || !rollNo) { showToast('Please fill all fields!', 'error'); return; }
+
+        const studentData = { name, dept, rollNo, email, pass,
+          skills: ['JavaScript', 'Python', 'SQL', 'React'],
+          projects: [
+            { title: 'E-Commerce Website', desc: 'Full-stack shopping portal with payment integration.', tags: ['React', 'Node.js', 'MongoDB'] },
+            { title: 'Library Management System', desc: 'Desktop app for tracking books and members.', tags: ['Java', 'MySQL'] }
+          ]
+        };
+        localStorage.setItem('sastra_student', JSON.stringify(studentData));
+        localStorage.setItem('sastra_user_type', 'student');
+        showToast('Account created! Redirecting…', 'success');
+        setTimeout(() => window.location.href = 'dashboard.html', 1200);
+
+      } else {
+        const stored = JSON.parse(localStorage.getItem('sastra_student') || '{}');
+        if (stored.email === email && stored.pass === pass) {
+          localStorage.setItem('sastra_user_type', 'student');
+          showToast('Welcome back, ' + stored.name + '!', 'success');
+          setTimeout(() => window.location.href = 'dashboard.html', 1000);
+        } else {
+          // Demo: auto-create a demo student
+          const demoStudent = {
+            name: 'Arun Kumar', dept: 'B.Tech CSE', rollNo: '121003567', email, pass,
+            skills: ['JavaScript', 'Python', 'React', 'SQL', 'Node.js', 'C++', 'Data Structures', 'Machine Learning'],
+            projects: [
+              { title: 'Smart Attendance System', desc: 'Face-recognition based attendance tracker using OpenCV and Python Flask backend.', tags: ['Python', 'OpenCV', 'Flask'] },
+              { title: 'E-Commerce Platform', desc: 'MERN stack shopping portal with Razorpay payment gateway and admin panel.', tags: ['React', 'Node.js', 'MongoDB'] },
+              { title: 'Library Management System', desc: 'Java Swing desktop application for managing books and member records with MySQL.', tags: ['Java', 'MySQL', 'Swing'] }
+            ]
+          };
+          localStorage.setItem('sastra_student', JSON.stringify(demoStudent));
+          localStorage.setItem('sastra_user_type', 'student');
+          showToast('Demo login successful! Welcome, Arun!', 'info');
+          setTimeout(() => window.location.href = 'dashboard.html', 1200);
+        }
+      }
+
+    } else {
+      const email = document.getElementById('companyEmail').value;
+      const pass  = document.getElementById('companyPassword').value;
+
+      if (isRegister) {
+        const name     = document.getElementById('compRegName').value;
+        const industry = document.getElementById('compRegIndustry').value;
+        if (!name || !industry) { showToast('Please fill all fields!', 'error'); return; }
+
+        const compData = { name, industry, email, pass };
+        localStorage.setItem('sastra_company', JSON.stringify(compData));
+        localStorage.setItem('sastra_user_type', 'company');
+        showToast('Company registered! Redirecting…', 'success');
+        setTimeout(() => window.location.href = 'company.html', 1200);
+      } else {
+        const stored = JSON.parse(localStorage.getItem('sastra_company') || '{}');
+        if (stored.email === email && stored.pass === pass) {
+          localStorage.setItem('sastra_user_type', 'company');
+          showToast('Welcome back, ' + stored.name + '!', 'success');
+          setTimeout(() => window.location.href = 'company.html', 1000);
+        } else {
+          const demoComp = { name: 'TCS Recruitment', industry: 'Information Technology', email, pass };
+          localStorage.setItem('sastra_company', JSON.stringify(demoComp));
+          localStorage.setItem('sastra_user_type', 'company');
+          showToast('Demo company login successful!', 'info');
+          setTimeout(() => window.location.href = 'company.html', 1200);
+        }
+      }
+    }
+  }
+
+  // ===== TOAST =====
+  function showToast(message, type = 'info') {
+    const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<span class="toast-icon">${icons[type]}</span><span>${message}</span>`;
+    document.getElementById('toast-container').appendChild(toast);
+    setTimeout(() => toast.remove(), 3200);
+  }
+</script>
+
 </body>
 </html>
