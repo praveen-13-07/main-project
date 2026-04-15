@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Job - College Portal</title>
+    <link rel="stylesheet" href="stylee.css">
+    <link rel="stylesheet" href="new_pages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* Apply page outer wrapper */
+        .apply-page {
+            min-height: 100vh;
+            background-color: rgb(198, 210, 216);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        /* Top header bar */
+        .apply-header {
+            background: white;
+            border-radius: 12px;
+            padding: 18px 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .apply-back-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .apply-back-btn:hover {
+            background: #4338ca;
+        }
+
+        .apply-job-title {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #111827;
+            text-transform: none;
+        }
+
+        .apply-company-name {
+            margin: 4px 0 0 0;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* Company logo shown in header */
+        .apply-company-logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+            display: none;
+        }
+
+        /* Form card */
+        .apply-form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .apply-form-card h2 {
+            margin: 0 0 25px 0;
+            font-size: 1.1rem;
+            color: #111827;
+            text-transform: none;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 15px;
+        }
+
+        /* Two-column grid for form fields */
+        .apply-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+        }
+
+        .apply-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .apply-form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .apply-form-group input,
+        .apply-form-group select,
+        .apply-form-group textarea {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .apply-form-group input:focus,
+        .apply-form-group select:focus,
+        .apply-form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .apply-form-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        /* Submit button */
+        .apply-submit-btn {
+            margin-top: 25px;
+            padding: 12px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .apply-submit-btn:hover {
+            background: #4338ca;
+        }
+
+        /* Success message */
+        .apply-success-msg {
+            display: none;
+            margin-top: 18px;
+            padding: 14px 18px;
+            background: #dcfce7;
+            color: #15803d;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Error message */
+        .apply-error-msg {
+            display: none;
+            margin-top: 18px;
+            padding: 12px 16px;
+            background: #fee2e2;
+            color: #b91c1c;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="apply-page">
+
+        <!-- Top header -->
+        <div class="apply-header">
+
+            <button class="apply-back-btn" onclick="history.back()">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+
+            <!-- Company logo (shown if available) -->
+            <img id="ap_companyLogo" class="apply-company-logo" src="" alt="Company Logo">
+
+            <div>
+                <h1 class="apply-job-title" id="ap_jobTitle">Job Application</h1>
+                <p class="apply-company-name" id="ap_companyName"></p>
+            </div>
+
+        </div>
+
+
+        <!-- Application Form Card -->
+        <div class="apply-form-card">
+
+            <h2><i class="fa-solid fa-file-pen" style="color:#6366f1; margin-right:8px;"></i> Fill Your Application</h2>
+
+            <!-- Grid fields -->
+            <div class="apply-form-grid">
+
+                <div class="apply-form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="ap_name" placeholder="e.g. Arjun Kumar">
+                </div>
+
+                <div class="apply-form-group">
+                    <label>College Name *</label>
+                    <input type="text" id="ap_college" placeholder="e.g. VIT University">
+                </div>
+
+                <div class="apply-form-group">
+                    <label>Department *</label>
+                    <input type="text" id="ap_dept" placeholder="e.g. Computer Science">
+                </div>
+
+                <div class="apply-form-group">
+                    <label>CGPA *</label>
+                    <input type="text" id="ap_cgpa" placeholder="e.g. 8.5">
+                </div>
+
+                <div class="apply-form-group">
+                    <label>Experience</label>
+                    <input type="text" id="ap_experience" placeholder="e.g. 1 year internship at TCS">
+                </div>
+
+                <div class="apply-form-group">
+                    <label>Preferred Location *</label>
+                    <input type="text" id="ap_location" placeholder="e.g. Bangalore">
+                </div>
+
+                <div class="apply-form-group">
+                    <label>Phone Number *</label>
+                    <input type="text" id="ap_phone" placeholder="e.g. +91 9876543210">
+                </div>
+
+                <div class="apply-form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="ap_email" placeholder="e.g. arjun@college.edu">
+                </div>
+
+            </div>
+
+            <!-- Full-width fields -->
+            <div class="apply-form-group" style="margin-top: 18px;">
+                <label>Skills / Cover Letter</label>
+                <textarea id="ap_skills" placeholder="Tell us about your skills, projects, and why you are the right fit for this job..."></textarea>
+            </div>
+
+            <div class="apply-form-group" style="margin-top: 14px;">
+                <label>Upload Resume * (PDF, DOC, DOCX)</label>
+                <input type="file" id="ap_resume" accept=".pdf,.doc,.docx" style="padding: 7px;">
+            </div>
+
+            <!-- Submit button -->
+            <button class="apply-submit-btn" onclick="ap_submitApplication()">
+                <i class="fa-solid fa-paper-plane"></i> Submit Application
+            </button>
+
+            <!-- Messages -->
+            <div class="apply-success-msg" id="ap_successMsg">
+                ✅ Applied successfully! Your application has been submitted.
+            </div>
+
+            <div class="apply-error-msg" id="ap_errorMsg">
+                ⚠️ Please fill all required fields (marked with *)
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =================== Read Job and Company from URL ===================
+        function ap_readUrlParams() {
+
+            var params  = new URLSearchParams(window.location.search);
+            var jobTitle = params.get("job")     || "Job";
+            var company  = params.get("company") || "";
+            var logoUrl  = params.get("logo")    || "";
+
+            // Show job title and company in header
+            document.getElementById("ap_jobTitle").innerText = jobTitle;
+
+            if (company) {
+                document.getElementById("ap_companyName").innerText = "at " + company;
+            }
+
+            // Show company logo if available
+            if (logoUrl) {
+                var logoEl = document.getElementById("ap_companyLogo");
+                logoEl.src = decodeURIComponent(logoUrl);
+                logoEl.style.display = "block";
+            }
+
+            // Store for use in submit
+            window.ap_jobTitle   = jobTitle;
+            window.ap_companyName = company;
+        }
+
+
+        // =================== Submit Application ===================
+        function ap_submitApplication() {
+
+            var name        = document.getElementById("ap_name").value.trim();
+            var college     = document.getElementById("ap_college").value.trim();
+            var dept        = document.getElementById("ap_dept").value.trim();
+            var cgpa        = document.getElementById("ap_cgpa").value.trim();
+            var location    = document.getElementById("ap_location").value.trim();
+            var phone       = document.getElementById("ap_phone").value.trim();
+            var email       = document.getElementById("ap_email").value.trim();
+            var resumeInput = document.getElementById("ap_resume");
+
+            var successMsg = document.getElementById("ap_successMsg");
+            var errorMsg   = document.getElementById("ap_errorMsg");
+
+            // Validate required fields
+            if (!name || !college || !dept || !cgpa || !location || !phone || !email) {
+                errorMsg.innerText = "⚠️ Please fill all required fields (marked with *)";
+                errorMsg.style.display = "block";
+                successMsg.style.display = "none";
+                setTimeout(function() { errorMsg.style.display = "none"; }, 3000);
+                return;
+            }
+
+            // Get resume file name
+            var resumeName = "Not uploaded";
+            if (resumeInput.files && resumeInput.files.length > 0) {
+                resumeName = resumeInput.files[0].name;
+            }
+
+            // Build the application key (same format as s_applyJob in student_main.html)
+            var jobKey = window.ap_jobTitle + (window.ap_companyName ? " at " + window.ap_companyName : "");
+
+            // Load existing applications
+            var apps = JSON.parse(localStorage.getItem("s_applications")) || [];
+
+            // Check if already applied
+            var alreadyApplied = apps.find(function(a) { return a.title === jobKey; });
+            if (alreadyApplied) {
+                errorMsg.innerText = "⚠️ You have already applied for this job!";
+                errorMsg.style.display = "block";
+                setTimeout(function() { errorMsg.style.display = "none"; }, 3000);
+                return;
+            }
+
+            // Get today's date
+            var today = new Date();
+            var dateStr = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
+
+            // Save to localStorage (same format used in student_main.html)
+            apps.push({ title: jobKey, date: dateStr, status: "Pending", resume: resumeName });
+            localStorage.setItem("s_applications", JSON.stringify(apps));
+
+            // Show success message
+            successMsg.style.display = "block";
+            errorMsg.style.display = "none";
+
+            // ===== Feature 7: Clear all form fields after submit =====
+            document.getElementById("ap_name").value       = "";
+            document.getElementById("ap_college").value    = "";
+            document.getElementById("ap_dept").value       = "";
+            document.getElementById("ap_cgpa").value       = "";
+            document.getElementById("ap_experience").value = "";
+            document.getElementById("ap_location").value   = "";
+            document.getElementById("ap_phone").value      = "";
+            document.getElementById("ap_email").value      = "";
+            document.getElementById("ap_skills").value     = "";
+            document.getElementById("ap_resume").value     = "";
+
+            // Hide success message after 4 seconds
+            setTimeout(function() {
+                successMsg.style.display = "none";
+            }, 4000);
+        }
+
+
+        // =================== On Page Load ===================
+        ap_readUrlParams();
+
+    </script>
+
+</body>
+
+</html>

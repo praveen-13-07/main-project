@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - College Portal</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /*======================================= stylee.css starts here========================================================================================================================= */
+        /*3. SIDEBAR NAVIGATION==========================================================*/
+
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: #111827;
+            color: white;
+            transition: left 0.3s ease;
+            padding-top: 20px;
+            z-index: 1001;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .sidebar-header h2 {
+            color: white;
+            margin-bottom: 10px;
+            text-transform: none;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sidebar-menu li:hover {
+            background: #374151;
+        }
+
+        /* ==========================================================
+   4. MAIN CONTENT AREA (The Fix for Disappearing Icons)
+   ========================================================== */
+        .main-content {
+            background-color: rgb(198, 210, 216);
+            min-height: 100vh;
+            /* Added transition for width to ensure icons don't hide */
+            transition: margin-left 0.3s ease, width 0.3s ease;
+            margin-left: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Pushes content AND recalculates width so icons stay on screen */
+        .sidebar.active~.main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .top-navbar {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .welcome-section h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            text-transform: none;
+        }
+
+        .menu-toggle {
+            background: #f3f4f6;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        /* SEARCH BAR */
+        .search-container {
+            background: #f9fafb;
+            border: 1px solid #6366f1;
+            border-radius: 30px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            width: 300px;
+        }
+
+        .search-container input {
+            border: none;
+            background: transparent;
+            margin: 0;
+            padding: 5px;
+            width: 100%;
+        }
+
+        /* USER ACTIONS (Bell & Profile) */
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-icon {
+            position: relative;
+            font-size: 1.2rem;
+            color: #f59e0b;
+            cursor: pointer;
+        }
+
+        .notification-icon .dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            height: 8px;
+            width: 8px;
+            background: red;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .profile-circle {
+            background: #6366f1;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        /* ==========================================================
+   5. DASHBOARD HOME STYLES
+   ========================================================== */
+        .dashboard-home {
+            padding: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+
+        .blue {
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+
+        .green {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .orange {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .stat-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .stat-info p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .recent-activity {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #f3f4f6;
+            background-color: #d7dadd;
+            padding: 10px;
+            border-radius: 5px;
+            transition: transform 0.3s;
+
+        }
+
+        .activity-item:hover {
+            transform: translateY(-3px);
+            background-color: #f7f9fb;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Success/Error Messages */
+        .form-msg {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .msg-error {
+            display: block;
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .msg-success {
+            display: block;
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+
+        /* Container for the Grid */
+        .dashboard-jobs {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            background-color: transparent;
+            /* Changed to match dashboard feel */
+        }
+
+        /* Individual Job Card */
+        .job-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Images at Top and Bottom */
+        .card-img-top {
+            width: 100%;
+            height: 300px;
+            /* Reduced height to fit both */
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Content inside the card */
+        .job-details {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .job-title {
+            color: #111827;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .job-details p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+            color: #4b5563;
+        }
+
+        .apply-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .apply-btn:hover {
+            background-color: #4338ca;
+        }
+
+
+
+        .hidden {
+            display: none;
+        }
+
+        /*======================================= stylee.css ends here========================================================================================================================= */
+        /*======================================= new.css starts here========================================================================================================================= */
+        /* ===================================================
+   NEW PAGES - Students, Companies, Analytics, Settings
+   (Add this to the bottom of your existing stylee.css)
+   =================================================== */
+
+
+        /* Page Header (used by all new pages) */
+        .page-header {
+            padding: 25px 25px 10px 25px;
+        }
+
+        .page-header h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.5rem;
+            text-transform: none;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+
+        /* Toolbar - search + filter row */
+        .page-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 0 25px 20px 25px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 8px 14px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .toolbar-search input {
+            border: none;
+            background: transparent;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .page-toolbar select {
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin: 0;
+            width: auto;
+        }
+
+
+        /* Table */
+        .table-container {
+            margin: 0 25px 30px 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+        }
+
+        .data-table th {
+            padding: 14px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table td {
+            padding: 14px 20px;
+            color: #4b5563;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+
+        /* Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-green {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-orange {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+
+        /* Table action button */
+        .table-btn {
+            padding: 6px 14px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .table-btn:hover {
+            background: #4338ca;
+        }
+
+
+        /* ===================== COMPANIES ===================== */
+
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 25px 30px 25px;
+        }
+
+        .company-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .company-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .company-logo-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .company-info {
+            flex: 1;
+        }
+
+        .company-info h3 {
+            margin: 0 0 4px 0;
+            font-size: 1rem;
+            color: #111827;
+            text-transform: none;
+        }
+
+        .company-info p {
+            margin: 2px 0;
+            font-size: 0.82rem;
+            color: #6b7280;
+        }
+
+
+        /* ===================== ANALYTICS ===================== */
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 20px;
+            padding: 0 25px 30px 25px;
+        }
+
+        .analytics-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .analytics-card h3 {
+            margin: 0 0 18px 0;
+            font-size: 1rem;
+            color: #111827;
+            text-transform: none;
+        }
+
+        /* Horizontal Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bar-label {
+            font-size: 0.85rem;
+            color: #4b5563;
+            width: 130px;
+            flex-shrink: 0;
+        }
+
+        .bar-track {
+            flex: 1;
+            background: #f3f4f6;
+            border-radius: 20px;
+            height: 22px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            transition: width 0.6s ease;
+        }
+
+        .blue-bar {
+            background: #6366f1;
+        }
+
+        .green-bar {
+            background: #22c55e;
+        }
+
+        .orange-bar {
+            background: #f59e0b;
+        }
+
+        .purple-bar {
+            background: #a855f7;
+        }
+
+        /* Package breakdown uses same bar styles */
+        .package-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .package-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .package-row span {
+            font-size: 0.85rem;
+            color: #4b5563;
+            width: 110px;
+            flex-shrink: 0;
+        }
+
+        /* Top list */
+        .top-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .top-list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .top-rank {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #6366f1;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .top-name {
+            flex: 1;
+            font-size: 0.9rem;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        /* Monthly column chart */
+        .month-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            height: 180px;
+            padding-top: 10px;
+        }
+
+        .month-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .month-bar-wrap {
+            display: flex;
+            align-items: flex-end;
+            height: 160px;
+        }
+
+        .month-bar {
+            width: 100%;
+            min-width: 18px;
+            background: #6366f1;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            font-size: 0.6rem;
+            color: white;
+            font-weight: 600;
+            padding-top: 3px;
+        }
+
+        .month-col span {
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+
+
+        /* ===================== SETTINGS ===================== */
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            padding: 0 25px 30px 25px;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .settings-card-header i {
+            font-size: 1.2rem;
+            color: #6366f1;
+        }
+
+        .settings-card-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: #111827;
+            text-transform: none;
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .settings-form label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 8px;
+        }
+
+        .settings-form input {
+            padding: 9px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .settings-form input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .settings-save-btn {
+            margin-top: 16px;
+            padding: 10px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .settings-save-btn:hover {
+            background: #4338ca;
+        }
+
+        .settings-msg {
+            display: none;
+            margin: 8px 0 0 0;
+            padding: 8px 12px;
+            background: #dcfce7;
+            color: #15803d;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Toggle Switch */
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            display: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #d1d5db;
+            border-radius: 24px;
+            transition: background 0.3s;
+        }
+
+        .toggle-slider:before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch input:checked+.toggle-slider {
+            background: #6366f1;
+        }
+
+        .toggle-switch input:checked+.toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+
+
+
+        /*======================================================new.css ends here===============================================================================================================================================================================================*/
+        /* ===== Profile Panel (right slide-in) ===== */
+        .profile-panel {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 25px 20px;
+            box-sizing: border-box;
+        }
+
+        .profile-panel.open {
+            right: 0;
+        }
+
+        .profile-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .profile-panel-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111827;
+            text-transform: none;
+        }
+
+        .panel-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 4px;
+        }
+
+        .panel-close-btn:hover {
+            color: #111827;
+        }
+
+        .panel-photo-wrap {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .panel-photo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #6366f1;
+            margin: 0 auto 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .panel-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .panel-photo-icon {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .panel-photo-hint {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .panel-info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.9rem;
+        }
+
+        .panel-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .panel-info-label {
+            color: #6b7280;
+            font-size: 0.8rem;
+            min-width: 80px;
+            font-weight: 600;
+        }
+
+        .panel-info-value {
+            color: #111827;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        /* Panel backdrop */
+        .panel-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1999;
+        }
+
+        .panel-backdrop.open {
+            display: block;
+        }
+
+        /* Profile circle clickable style */
+        .profile-circle {
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* Validation error/success message */
+        .val-error {
+            display: none;
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* Student Info Form */
+        .student-info-form {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin: 0 25px 30px 25px;
+        }
+
+        .student-info-form h3 {
+            margin: 0 0 18px 0;
+            font-size: 1rem;
+            color: #111827;
+            text-transform: none;
+        }
+
+        .si-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .si-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .si-form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .si-form-group input,
+        .si-form-group textarea {
+            padding: 9px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .si-form-group input:focus,
+        .si-form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .si-form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .si-submit-btn {
+            margin-top: 18px;
+            padding: 10px 22px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .si-submit-btn:hover {
+            background: #4338ca;
+        }
+
+        .si-msg {
+            display: none;
+            margin-top: 10px;
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+
+        <div class="sidebar-header">
+            <h2>Student Portal</h2>
+            <hr style="margin-bottom:20px;">
+        </div>
+
+        <ul class="sidebar-menu">
+
+            <li id="s_homepage" onclick="s_loadHome()">
+                <i class="fa-solid fa-house"></i> Home
+            </li>
+
+            <li id="s_jobspage" onclick="s_loadJobs()">
+                <i class="fa-solid fa-briefcase"></i> Jobs
+            </li>
+
+            <li id="s_companiespage" onclick="s_loadCompanies()">
+                <i class="fa-solid fa-building"></i> Companies
+            </li>
+
+            <li id="s_applicationspage" onclick="s_loadApplications()">
+                <i class="fa-solid fa-file-alt"></i> My Applications
+            </li>
+
+            <li id="s_settingspage" onclick="s_loadSettings()">
+                <i class="fa-solid fa-gear"></i> Settings
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- TOP NAVBAR -->
+        <div class="top-navbar">
+
+            <div class="welcome-section">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div>
+                    <h1>Student Dashboard</h1>
+                    <p id="s_welcomeText">Welcome back!</p>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search jobs, companies...">
+            </div>
+
+            <div class="user-actions">
+
+                <div class="notification-icon">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="dot"></span>
+                </div>
+
+                <div class="profile-circle" id="s_profileCircle" style="margin-right: 15px;"
+                    onclick="s_openProfilePanel()" title="View Profile"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================ -->
+        <!-- HOME PAGE                                         -->
+        <!-- ================================================ -->
+        <div id="s_dashboardHome" class="dashboard-home">
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>120</h3>
+                        <p>Jobs Available</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fa-solid fa-file-circle-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="s_appliedCount">0</h3>
+                        <p>Jobs Applied</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>85</h3>
+                        <p>Partner Companies</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Recent Job Postings -->
+            <div class="recent-activity">
+
+                <h2>Recent Job Postings</h2>
+
+                <div class="activity-list">
+
+                    <div class="activity-item">
+                        <p><strong>Software Engineer</strong> at Google</p>
+                        <span>2 hours ago</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <p><strong>UI/UX Designer</strong> at Adobe</p>
+                        <span>5 hours ago</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <p><strong>Product Manager</strong> at Microsoft</p>
+                        <span>3 hours ago</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <p><strong>Data Scientist</strong> at TCS</p>
+                        <span>2 hours ago</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <p><strong>Full Stack Developer</strong> at Amazon</p>
+                        <span>2 hours ago</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================ -->
+        <!-- JOBS PAGE                                         -->
+        <!-- ================================================ -->
+        <div id="s_dashboardJobs" class="hidden">
+
+            <div class="page-header">
+                <h2>Available Jobs</h2>
+                <p>Browse and apply for jobs posted by companies</p>
+            </div>
+
+            <!-- Search bar for jobs -->
+            <div class="page-toolbar">
+                <div class="toolbar-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="s_jobSearchInput" placeholder="Search jobs..." oninput="s_filterJobs()">
+                </div>
+                <select id="s_jobTypeFilter" onchange="s_filterJobs()">
+                    <option value="">All Types</option>
+                    <option value="IT">IT</option>
+                    <option value="Design">Design</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Management">Management</option>
+                </select>
+            </div>
+
+            <!-- Job Cards Grid -->
+            <div class="dashboard-jobs" id="s_jobGrid">
+
+                <div class="job-card" data-title="full stack developer" data-type="IT">
+                    <img src="https://th.bing.com/th/id/OIP.JP51Xm3Txi-tw782aH8z2gHaEK?w=297&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
+                        alt="Google" class="card-img-top">
+                    <div class="job-details">
+                        <h2 class="job-title">Full Stack Developer</h2>
+                        <p><strong>Company:</strong> Google</p>
+                        <p><strong>Requirement:</strong> Frontend and backend experience</p>
+                        <p><strong>Salary:</strong> 4 LPA</p>
+                        <button class="apply-btn" onclick="s_goToApply('Full Stack Developer', 'Google')">Apply
+                            Now</button>
+                    </div>
+                </div>
+
+                <div class="job-card" data-title="ui/ux designer" data-type="Design">
+                    <img src="https://tse1.mm.bing.net/th/id/OIP.4r8CS6tcZqm4sWBYG3Gy_gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+                        alt="Adobe" class="card-img-top">
+                    <div class="job-details">
+                        <h2 class="job-title">UI/UX Designer</h2>
+                        <p><strong>Company:</strong> Adobe</p>
+                        <p><strong>Requirement:</strong> Experience in UI/UX design</p>
+                        <p><strong>Salary:</strong> 4 LPA</p>
+                        <button class="apply-btn" onclick="s_goToApply('UI/UX Designer', 'Adobe')">Apply Now</button>
+                    </div>
+                </div>
+
+                <div class="job-card" data-title="data scientist" data-type="IT">
+                    <img src="https://d1hbpr09pwz0sk.cloudfront.net/logo_url/vdart-digital-e5f0611e" alt="TCS"
+                        class="card-img-top">
+                    <div class="job-details">
+                        <h2 class="job-title">Data Scientist</h2>
+                        <p><strong>Company:</strong> TCS</p>
+                        <p><strong>Requirement:</strong> Strong analytical and programming skills</p>
+                        <p><strong>Salary:</strong> 5 LPA</p>
+                        <button class="apply-btn" onclick="s_goToApply('Data Scientist', 'TCS')">Apply Now</button>
+                    </div>
+                </div>
+
+                <div class="job-card" data-title="software engineer" data-type="IT">
+                    <img src="https://th.bing.com/th/id/OIP.JP51Xm3Txi-tw782aH8z2gHaEK?w=297&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
+                        alt="Google" class="card-img-top">
+                    <div class="job-details">
+                        <h2 class="job-title">Software Engineer</h2>
+                        <p><strong>Company:</strong> Microsoft</p>
+                        <p><strong>Requirement:</strong> Strong programming skills in Python or Java</p>
+                        <p><strong>Salary:</strong> 6 LPA</p>
+                        <button class="apply-btn" onclick="s_goToApply('Software Engineer', 'Microsoft')">Apply
+                            Now</button>
+                    </div>
+                </div>
+
+                <div class="job-card" data-title="product manager" data-type="Management">
+                    <img src="https://tse3.mm.bing.net/th/id/OIP.J-UWEEp6tnF6gCnC9Wt6UAAAAA?w=200&h=200&rs=1&pid=ImgDetMain&o=7&rm=3"
+                        class="card-img-top" alt="Amazon">
+                    <div class="job-details">
+                        <h2 class="job-title">Product Manager</h2>
+                        <p><strong>Company:</strong> Amazon</p>
+                        <p><strong>Requirement:</strong> Product strategy and leadership skills</p>
+                        <p><strong>Salary:</strong> 8 LPA</p>
+                        <button class="apply-btn" onclick="s_goToApply('Product Manager', 'Amazon')">Apply Now</button>
+                    </div>
+                </div>
+
+                <div class="job-card" data-title="financial analyst" data-type="Finance">
+                    <img src="https://th.bing.com/th/id/R.8556e82494514774912d96d4fb824f63?rik=n1Eu6w77rA25fg&riu=http%3a%2f%2fupload.wikimedia.org%2fwikipedia%2fcommons%2f3%2f3f%2fRiggs_National_Bank_building.JPG&ehk=sDHocSbD70rLZUeYpFnEKz9YgS5ErV49FolCoeLpJC0%3d&risl=&pid=ImgRaw&r=0"
+                        alt="HDFC" class="card-img-top">
+                    <div class="job-details">
+                        <h2 class="job-title">Financial Analyst</h2>
+                        <p><strong>Company:</strong> HDFC Bank</p>
+                        <p><strong>Requirement:</strong> Finance background and analytical skills</p>
+                        <p><strong>Salary:</strong> 5 LPA</p>
+                        <button class="apply-btn" onclick="s_goToApply('Financial Analyst', 'HDFC Bank')">Apply
+                            Now</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Apply Success Message -->
+            <div id="s_applyMsg"
+                style="display:none; margin: 0 25px 20px 25px; padding: 12px 16px; background: #dcfce7; color: #15803d; border-radius: 8px; font-weight: 600;">
+                ✅ Applied successfully!
+            </div>
+
+        </div>
+
+
+        <!-- ================================================ -->
+        <!-- COMPANIES PAGE                                    -->
+        <!-- ================================================ -->
+        <div id="s_dashboardCompanies" class="hidden">
+
+            <div class="page-header">
+                <h2>Companies</h2>
+                <p>View all companies recruiting from our college</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid" style="margin: 0 25px 25px 25px;">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fa-solid fa-building"></i></div>
+                    <div class="stat-info">
+                        <h3>85</h3>
+                        <p>Partner Companies</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fa-solid fa-briefcase"></i></div>
+                    <div class="stat-info">
+                        <h3>120</h3>
+                        <p>Active Jobs</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fa-solid fa-handshake"></i></div>
+                    <div class="stat-info">
+                        <h3>312</h3>
+                        <p>Total Hirings</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="page-toolbar">
+                <div class="toolbar-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="s_companySearchInput" placeholder="Search by company name..."
+                        oninput="s_filterCompanies()">
+                </div>
+                <select id="s_companySectorFilter" onchange="s_filterCompanies()">
+                    <option value="">All Sectors</option>
+                    <option value="IT">IT</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Design">Design</option>
+                    <option value="E-Commerce">E-Commerce</option>
+                </select>
+            </div>
+
+            <!-- Company Cards -->
+            <div class="company-grid" id="s_companyGrid">
+
+                <div class="company-card" data-name="google" data-sector="IT">
+                    <div class="company-logo-circle" style="background: #e8f0fe;">
+                        <i class="fa-brands fa-google" style="color:#4285F4; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="company-info">
+                        <h3>Google</h3>
+                        <p>Sector: IT</p>
+                        <p>Jobs Posted: 12</p>
+                        <p>Hired: 45</p>
+                    </div>
+                    <span class="badge badge-green">Active</span>
+                </div>
+
+                <div class="company-card" data-name="microsoft" data-sector="IT">
+                    <div class="company-logo-circle" style="background: #e8f4fd;">
+                        <i class="fa-brands fa-microsoft" style="color:#0078D4; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="company-info">
+                        <h3>Microsoft</h3>
+                        <p>Sector: IT</p>
+                        <p>Jobs Posted: 10</p>
+                        <p>Hired: 38</p>
+                    </div>
+                    <span class="badge badge-green">Active</span>
+                </div>
+
+                <div class="company-card" data-name="amazon" data-sector="E-Commerce">
+                    <div class="company-logo-circle" style="background: #fef3e2;">
+                        <i class="fa-brands fa-amazon" style="color:#FF9900; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="company-info">
+                        <h3>Amazon</h3>
+                        <p>Sector: E-Commerce</p>
+                        <p>Jobs Posted: 15</p>
+                        <p>Hired: 60</p>
+                    </div>
+                    <span class="badge badge-green">Active</span>
+                </div>
+
+                <div class="company-card" data-name="adobe" data-sector="Design">
+                    <div class="company-logo-circle" style="background: #fde8e8;">
+                        <i class="fa-solid fa-a" style="color:#FF0000; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="company-info">
+                        <h3>Adobe</h3>
+                        <p>Sector: Design</p>
+                        <p>Jobs Posted: 8</p>
+                        <p>Hired: 22</p>
+                    </div>
+                    <span class="badge badge-green">Active</span>
+                </div>
+
+                <div class="company-card" data-name="tcs" data-sector="IT">
+                    <div class="company-logo-circle" style="background: #e8f0fe;">
+                        <i class="fa-solid fa-t" style="color:#1a2f6e; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="company-info">
+                        <h3>TCS</h3>
+                        <p>Sector: IT</p>
+                        <p>Jobs Posted: 20</p>
+                        <p>Hired: 80</p>
+                    </div>
+                    <span class="badge badge-green">Active</span>
+                </div>
+
+                <div class="company-card" data-name="hdfc bank" data-sector="Finance">
+                    <div class="company-logo-circle" style="background: #dcfce7;">
+                        <i class="fa-solid fa-landmark" style="color:#004C8F; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="company-info">
+                        <h3>HDFC Bank</h3>
+                        <p>Sector: Finance</p>
+                        <p>Jobs Posted: 6</p>
+                        <p>Hired: 27</p>
+                    </div>
+                    <span class="badge badge-orange">Inactive</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================ -->
+        <!-- MY APPLICATIONS PAGE                              -->
+        <!-- ================================================ -->
+        <div id="s_dashboardApplications" class="hidden">
+
+            <div class="page-header">
+                <h2>My Applications</h2>
+                <p>Track all jobs you have applied for</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid" style="margin: 0 25px 25px 25px;">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fa-solid fa-file-alt"></i></div>
+                    <div class="stat-info">
+                        <h3 id="s_totalApplied">0</h3>
+                        <p>Total Applied</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="stat-info">
+                        <h3>-</h3>
+                        <p>Shortlisted</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fa-solid fa-clock"></i></div>
+                    <div class="stat-info">
+                        <h3 id="s_pendingCount">0</h3>
+                        <p>Pending</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== STUDENT PROFILE INFO FORM ===== -->
+            <div class="student-info-form">
+                <h3><i class="fa-solid fa-id-card" style="color:#6366f1; margin-right:8px;"></i>My Profile Information
+                </h3>
+                <div class="si-form-grid">
+
+                    <div class="si-form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="si_name" placeholder="e.g. Arjun Kumar">
+                    </div>
+
+                    <div class="si-form-group">
+                        <label>College Name *</label>
+                        <input type="text" id="si_college" placeholder="e.g. VIT University">
+                    </div>
+
+                    <div class="si-form-group">
+                        <label>Department *</label>
+                        <input type="text" id="si_dept" placeholder="e.g. Computer Science">
+                    </div>
+
+                    <div class="si-form-group">
+                        <label>CGPA *</label>
+                        <input type="text" id="si_cgpa" placeholder="e.g. 8.5">
+                    </div>
+
+                    <div class="si-form-group">
+                        <label>Experience</label>
+                        <input type="text" id="si_experience" placeholder="e.g. 1 year internship at TCS">
+                    </div>
+
+                    <div class="si-form-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="si_phone" placeholder="e.g. +91 9876543210">
+                    </div>
+
+                </div>
+
+                <div class="si-form-group" style="margin-top: 14px;">
+                    <label>Skills / About Me</label>
+                    <textarea id="si_about" placeholder="e.g. Python, JavaScript, problem-solving..."></textarea>
+                </div>
+
+                <div class="si-form-group" style="margin-top: 12px;">
+                    <label>Upload Resume (PDF)</label>
+                    <input type="file" id="si_resume" accept=".pdf,.doc,.docx" style="padding: 6px;">
+                </div>
+
+                <button class="si-submit-btn" onclick="s_saveStudentInfo()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Profile Info
+                </button>
+
+                <p class="si-msg" id="si_successMsg"></p>
+
+            </div>
+
+            <!-- Applications Table -->
+            <div class="table-container" style="margin: 0 25px 30px 25px;">
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Job Title</th>
+                            <th>Applied On</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="s_applicationsTableBody">
+                        <!-- Filled by JavaScript -->
+                    </tbody>
+                </table>
+
+                <!-- Empty message -->
+                <div id="s_noApplicationsMsg" style="text-align:center; padding: 40px; color: #6b7280; display: block;">
+                    <i class="fa-solid fa-folder-open"
+                        style="font-size: 2.5rem; margin-bottom: 10px; display:block;"></i>
+                    You have not applied to any jobs yet. Go to <strong>Jobs</strong> to apply!
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================ -->
+        <!-- SETTINGS PAGE                                     -->
+        <!-- ================================================ -->
+        <div id="s_dashboardSettings" class="hidden">
+
+            <div class="page-header">
+                <h2>Settings / Profile</h2>
+                <p>Manage your student profile and account preferences</p>
+            </div>
+
+            <div class="settings-grid">
+
+                <!-- Profile Info -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fa-solid fa-user"></i>
+                        <h3>My Profile</h3>
+                    </div>
+                    <div class="settings-form">
+                        <label>Full Name</label>
+                        <input type="text" id="s_profileName" placeholder="Your full name">
+
+                        <label>Department</label>
+                        <input type="text" id="s_profileDept" placeholder="Your department">
+
+                        <label>Phone Number</label>
+                        <input type="text" id="s_profilePhone" placeholder="Your phone number">
+
+                        <label>Email Address</label>
+                        <input type="email" id="s_profileEmail" placeholder="Your email">
+
+                        <button class="settings-save-btn" onclick="s_saveProfile()">Save Changes</button>
+                        <p class="settings-msg" id="s_profileMsg">Profile saved successfully!</p>
+                        <p class="val-error" id="s_profileError">Please fill all fields</p>
+                    </div>
+                </div>
+
+                <!-- Change Password -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fa-solid fa-lock"></i>
+                        <h3>Change Password</h3>
+                    </div>
+                    <div class="settings-form">
+                        <label>Current Password</label>
+                        <input type="password" placeholder="Enter current password">
+
+                        <label>New Password</label>
+                        <input type="password" placeholder="Enter new password">
+
+                        <label>Confirm New Password</label>
+                        <input type="password" placeholder="Confirm new password">
+
+                        <button class="settings-save-btn" onclick="s_showMsg('s_passwordMsg')">Update Password</button>
+                        <p class="settings-msg" id="s_passwordMsg">Password updated successfully!</p>
+                    </div>
+                </div>
+
+                <!-- Notification Preferences -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fa-solid fa-bell"></i>
+                        <h3>Notification Preferences</h3>
+                    </div>
+                    <div class="settings-form">
+                        <div class="toggle-row">
+                            <span>Email Notifications</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-row">
+                            <span>New Job Alerts</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-row">
+                            <span>Application Status Updates</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-row">
+                            <span>Interview Reminders</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logout -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <h3>Account</h3>
+                    </div>
+                    <div class="settings-form">
+                        <p style="color:#6b7280; font-size:0.9rem; margin-bottom: 15px;">
+                            You are currently logged in as a student. Click the button below to log out.
+                        </p>
+                        <button class="settings-save-btn" style="background:#ef4444;"
+                            onclick="window.location.href='index.html'">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===== PROFILE PANEL BACKDROP ===== -->
+    <div class="panel-backdrop" id="s_panelBackdrop" onclick="s_closeProfilePanel()"></div>
+
+    <!-- ===== STUDENT PROFILE PANEL ===== -->
+    <div class="profile-panel" id="s_profilePanel">
+
+        <div class="profile-panel-header">
+            <h3>My Profile</h3>
+            <button class="panel-close-btn" onclick="s_closeProfilePanel()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Profile Photo -->
+        <div class="panel-photo-wrap">
+            <div class="panel-photo" id="s_panelPhotoWrap" onclick="document.getElementById('s_photoInput').click()"
+                title="Click to change photo">
+                <i class="fa-solid fa-user panel-photo-icon" id="s_panelPhotoIcon"></i>
+                <img id="s_panelPhotoImg" src="" alt="" style="display:none;">
+            </div>
+            <p class="panel-photo-hint"><i class="fa-solid fa-camera"></i> Click photo to change</p>
+            <!-- Hidden file input for photo upload -->
+            <input type="file" id="s_photoInput" accept="image/*" style="display:none;" onchange="s_changePhoto(this)">
+        </div>
+
+        <!-- Profile Info Rows -->
+        <div class="panel-info-row">
+            <span class="panel-info-label">Name</span>
+            <span class="panel-info-value" id="sp_name">Not set</span>
+        </div>
+        <div class="panel-info-row">
+            <span class="panel-info-label">College</span>
+            <span class="panel-info-value" id="sp_college">Not set</span>
+        </div>
+        <div class="panel-info-row">
+            <span class="panel-info-label">Department</span>
+            <span class="panel-info-value" id="sp_dept">Not set</span>
+        </div>
+        <div class="panel-info-row">
+            <span class="panel-info-label">CGPA</span>
+            <span class="panel-info-value" id="sp_cgpa">Not set</span>
+        </div>
+        <div class="panel-info-row">
+            <span class="panel-info-label">Experience</span>
+            <span class="panel-info-value" id="sp_experience">Not set</span>
+        </div>
+        <div class="panel-info-row">
+            <span class="panel-info-label">Phone</span>
+            <span class="panel-info-value" id="sp_phone">Not set</span>
+        </div>
+        <div class="panel-info-row">
+            <span class="panel-info-label">Resume</span>
+            <span class="panel-info-value" id="sp_resume">Not uploaded</span>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =================== Toggle Sidebar ===================
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("active");
+        }
+
+
+        // =================== Hide All Pages ===================
+        function s_hideAll() {
+            document.getElementById("s_dashboardHome").classList.add("hidden");
+            document.getElementById("s_dashboardJobs").classList.add("hidden");
+            document.getElementById("s_dashboardCompanies").classList.add("hidden");
+            document.getElementById("s_dashboardApplications").classList.add("hidden");
+            document.getElementById("s_dashboardSettings").classList.add("hidden");
+        }
+
+
+        // =================== Navigation ===================
+        function s_loadHome() {
+            s_hideAll();
+            document.getElementById("s_dashboardHome").classList.remove("hidden");
+            s_updateAppliedCount();
+        }
+
+        function s_loadJobs() {
+            s_hideAll();
+            document.getElementById("s_dashboardJobs").classList.remove("hidden");
+            s_loadCompanyJobs();
+        }
+
+        function s_loadCompanies() {
+            s_hideAll();
+            document.getElementById("s_dashboardCompanies").classList.remove("hidden");
+        }
+
+        function s_loadApplications() {
+            s_hideAll();
+            document.getElementById("s_dashboardApplications").classList.remove("hidden");
+            s_loadApplicationsTable();
+        }
+
+        function s_loadSettings() {
+            s_hideAll();
+            document.getElementById("s_dashboardSettings").classList.remove("hidden");
+            s_loadProfileData();
+        }
+
+
+        // =================== Navigate to Apply Job Page ===================
+        function s_goToApply(jobTitle, company) {
+            window.location.href = 'apply_job.html?job=' + encodeURIComponent(jobTitle) + '&company=' + encodeURIComponent(company);
+        }
+
+
+        // =================== Load Company-Posted Jobs from localStorage ===================
+        function s_loadCompanyJobs() {
+
+            var jobs = JSON.parse(localStorage.getItem("c_postedJobs")) || [];
+            var grid = document.getElementById("s_jobGrid");
+
+            // Remove any previously added company job cards to avoid duplicates
+            var oldCards = grid.querySelectorAll(".company-posted-job");
+            oldCards.forEach(function (card) { card.remove(); });
+
+            if (jobs.length === 0) return;
+
+            jobs.forEach(function (job) {
+
+                // Build the photo/logo section
+                var photoHTML;
+                if (job.photo) {
+                    photoHTML = "<img src='" + job.photo + "' alt='" + job.title + "' class='card-img-top'>";
+                } else {
+                    photoHTML = "<div style='height:120px; background:linear-gradient(135deg,#6366f1,#8b5cf6); display:flex; align-items:center; justify-content:center;'>" +
+                        "<i class='fa-solid fa-building' style='color:white; font-size:2.2rem;'></i></div>";
+                }
+
+                var card = document.createElement("div");
+                card.className = "job-card company-posted-job";
+                card.setAttribute("data-title", (job.title || "").toLowerCase());
+                card.setAttribute("data-type", job.category || "");
+
+                // Safely build onclick — escape single quotes in title/company
+                var safeTitle = (job.title || "").replace(/'/g, "\\'");
+                var safeCompany = (job.companyName || "Company").replace(/'/g, "\\'");
+                var encodedLogo = job.photo ? encodeURIComponent(job.photo) : "";
+
+                card.innerHTML =
+                    photoHTML +
+                    "<div class='job-details'>" +
+                    "<h2 class='job-title'>" + (job.title || "Job") + "</h2>" +
+                    "<p><strong>Type:</strong> " + (job.type || "Full Time") + "</p>" +
+                    "<p><strong>Salary:</strong> " + (job.salary || "Not specified") + "</p>" +
+                    "<p><strong>Location:</strong> " + (job.location || "Not specified") + "</p>" +
+                    "<button class='apply-btn' onclick=\"s_goToApplyWithLogo('" + safeTitle + "','" + safeCompany + "','" + encodedLogo + "')\">Apply Now</button>" +
+                    "</div>";
+
+                grid.appendChild(card);
+            });
+        }
+
+
+        // =================== Navigate to Apply Job Page (with logo URL) ===================
+        function s_goToApplyWithLogo(jobTitle, company, encodedLogo) {
+            var url = 'apply_job.html?job=' + encodeURIComponent(jobTitle) + '&company=' + encodeURIComponent(company);
+            if (encodedLogo) {
+                url += '&logo=' + encodedLogo;
+            }
+            window.location.href = url;
+        }
+
+
+        // =================== Apply for a Job ===================
+        function s_applyJob(jobTitle) {
+
+            // Get existing applications from localStorage
+            var apps = JSON.parse(localStorage.getItem("s_applications")) || [];
+
+            // Check if already applied
+            var alreadyApplied = apps.find(function (a) { return a.title === jobTitle; });
+
+            if (alreadyApplied) {
+                alert("You have already applied for this job!");
+                return;
+            }
+
+            // Get today's date
+            var today = new Date();
+            var dateStr = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
+
+            // Add the new application
+            apps.push({ title: jobTitle, date: dateStr, status: "Pending" });
+            localStorage.setItem("s_applications", JSON.stringify(apps));
+
+            // Show success message
+            var msg = document.getElementById("s_applyMsg");
+            msg.innerText = "✅ Applied for " + jobTitle + " successfully!";
+            msg.style.display = "block";
+
+            // Hide message after 3 seconds
+            setTimeout(function () {
+                msg.style.display = "none";
+            }, 3000);
+
+            // Update count on home page
+            s_updateAppliedCount();
+        }
+
+
+        // =================== Load Applications Table ===================
+        function s_loadApplicationsTable() {
+
+            var apps = JSON.parse(localStorage.getItem("s_applications")) || [];
+            var tbody = document.getElementById("s_applicationsTableBody");
+            var noMsg = document.getElementById("s_noApplicationsMsg");
+
+            // Update stat cards
+            document.getElementById("s_totalApplied").innerText = apps.length;
+            document.getElementById("s_pendingCount").innerText = apps.length;
+
+            if (apps.length === 0) {
+                tbody.innerHTML = "";
+                noMsg.style.display = "block";
+                return;
+            }
+
+            noMsg.style.display = "none";
+            tbody.innerHTML = "";
+
+            for (var i = 0; i < apps.length; i++) {
+
+                var row = document.createElement("tr");
+
+                row.innerHTML =
+                    "<td>" + (i + 1) + "</td>" +
+                    "<td>" + apps[i].title + "</td>" +
+                    "<td>" + apps[i].date + "</td>" +
+                    "<td><span class='badge badge-orange'>" + apps[i].status + "</span></td>" +
+                    "<td><button class='table-btn' style='background:#ef4444;' onclick='s_withdrawJob(" + i + ")'>Withdraw</button></td>";
+
+                tbody.appendChild(row);
+            }
+        }
+
+
+        // =================== Withdraw Application ===================
+        function s_withdrawJob(index) {
+            var apps = JSON.parse(localStorage.getItem("s_applications")) || [];
+            apps.splice(index, 1);
+            localStorage.setItem("s_applications", JSON.stringify(apps));
+            s_loadApplicationsTable();
+        }
+
+
+        // =================== Update Applied Count on Home ===================
+        function s_updateAppliedCount() {
+            var apps = JSON.parse(localStorage.getItem("s_applications")) || [];
+            document.getElementById("s_appliedCount").innerText = apps.length;
+        }
+
+
+        // =================== Filter Jobs ===================
+        function s_filterJobs() {
+            var searchInput = document.getElementById("s_jobSearchInput").value.toLowerCase();
+            var typeFilter = document.getElementById("s_jobTypeFilter").value;
+            var cards = document.querySelectorAll("#s_jobGrid .job-card");
+
+            cards.forEach(function (card) {
+                var title = card.getAttribute("data-title") || "";
+                var type = card.getAttribute("data-type") || "";
+
+                var matchesTitle = title.includes(searchInput);
+                var matchesType = typeFilter === "" || type === typeFilter;
+
+                if (matchesTitle && matchesType) {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+
+        // =================== Filter Companies ===================
+        function s_filterCompanies() {
+            var searchInput = document.getElementById("s_companySearchInput").value.toLowerCase();
+            var sectorFilter = document.getElementById("s_companySectorFilter").value;
+            var cards = document.querySelectorAll("#s_companyGrid .company-card");
+
+            cards.forEach(function (card) {
+                var name = card.getAttribute("data-name") || "";
+                var sector = card.getAttribute("data-sector") || "";
+
+                var matchesName = name.includes(searchInput);
+                var matchesSector = sectorFilter === "" || sector === sectorFilter;
+
+                if (matchesName && matchesSector) {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+
+        // =================== Settings: Save Profile with Validation ===================
+        function s_saveProfile() {
+            var name = document.getElementById("s_profileName").value.trim();
+            var dept = document.getElementById("s_profileDept").value.trim();
+            var phone = document.getElementById("s_profilePhone").value.trim();
+            var email = document.getElementById("s_profileEmail").value.trim();
+
+            // Check all fields are filled
+            if (!name || !dept || !phone || !email) {
+                // Show error message
+                var errMsg = document.getElementById("s_profileError");
+                errMsg.style.display = "block";
+                // Hide any success message
+                document.getElementById("s_profileMsg").style.display = "none";
+                setTimeout(function () { errMsg.style.display = "none"; }, 3000);
+                return;
+            }
+
+            // Save to localStorage
+            var profileData = { name: name, dept: dept, phone: phone, email: email };
+            localStorage.setItem("s_profileSettings", JSON.stringify(profileData));
+
+            // Update profile panel values too
+            document.getElementById("sp_name").innerText = name;
+            document.getElementById("sp_dept").innerText = dept;
+            document.getElementById("sp_phone").innerText = phone;
+
+            // Show success
+            s_showMsg("s_profileMsg");
+        }
+
+        function s_showMsg(msgId) {
+            var msg = document.getElementById(msgId);
+            msg.style.display = "block";
+            setTimeout(function () {
+                msg.style.display = "none";
+            }, 3000);
+        }
+
+
+        // =================== Load Profile Data from localStorage ===================
+        function s_loadProfileData() {
+            var saved = JSON.parse(localStorage.getItem("s_profileSettings")) || null;
+            if (saved) {
+                if (saved.name) document.getElementById("s_profileName").value = saved.name;
+                if (saved.dept) document.getElementById("s_profileDept").value = saved.dept;
+                if (saved.phone) document.getElementById("s_profilePhone").value = saved.phone;
+                if (saved.email) document.getElementById("s_profileEmail").value = saved.email;
+            }
+        }
+
+
+        // =================== Save Student Info Form ===================
+        function s_saveStudentInfo() {
+            var name = document.getElementById("si_name").value.trim();
+            var college = document.getElementById("si_college").value.trim();
+            var dept = document.getElementById("si_dept").value.trim();
+            var cgpa = document.getElementById("si_cgpa").value.trim();
+            var experience = document.getElementById("si_experience").value.trim();
+            var phone = document.getElementById("si_phone").value.trim();
+            var about = document.getElementById("si_about").value.trim();
+            var resumeInput = document.getElementById("si_resume");
+
+            var msgEl = document.getElementById("si_successMsg");
+
+            // Validate required fields
+            if (!name || !college || !dept || !cgpa) {
+                msgEl.innerText = "Please fill all required fields (Name, College, Department, CGPA)";
+                msgEl.style.background = "#fee2e2";
+                msgEl.style.color = "#b91c1c";
+                msgEl.style.display = "block";
+                setTimeout(function () { msgEl.style.display = "none"; }, 3000);
+                return;
+            }
+
+            // Get resume file name if uploaded
+            var resumeName = "Not uploaded";
+            if (resumeInput.files && resumeInput.files.length > 0) {
+                resumeName = resumeInput.files[0].name;
+            }
+
+            // Save to localStorage
+            var info = {
+                name: name, college: college, dept: dept, cgpa: cgpa,
+                experience: experience, phone: phone, about: about, resumeName: resumeName
+            };
+            localStorage.setItem("s_studentInfo", JSON.stringify(info));
+
+            // Update profile panel
+            document.getElementById("sp_name").innerText = name;
+            document.getElementById("sp_college").innerText = college;
+            document.getElementById("sp_dept").innerText = dept;
+            document.getElementById("sp_cgpa").innerText = cgpa;
+            document.getElementById("sp_experience").innerText = experience || "Not set";
+            document.getElementById("sp_phone").innerText = phone || "Not set";
+            document.getElementById("sp_resume").innerText = resumeName;
+
+            // Show success
+            msgEl.innerText = "✅ Profile information saved successfully!";
+            msgEl.style.background = "#dcfce7";
+            msgEl.style.color = "#15803d";
+            msgEl.style.display = "block";
+            setTimeout(function () { msgEl.style.display = "none"; }, 3000);
+        }
+
+
+        // =================== Profile Panel Open / Close ===================
+        function s_openProfilePanel() {
+            // Load saved student info into panel when opening
+            var info = JSON.parse(localStorage.getItem("s_studentInfo")) || null;
+            if (info) {
+                document.getElementById("sp_name").innerText = info.name || "Not set";
+                document.getElementById("sp_college").innerText = info.college || "Not set";
+                document.getElementById("sp_dept").innerText = info.dept || "Not set";
+                document.getElementById("sp_cgpa").innerText = info.cgpa || "Not set";
+                document.getElementById("sp_experience").innerText = info.experience || "Not set";
+                document.getElementById("sp_phone").innerText = info.phone || "Not set";
+                document.getElementById("sp_resume").innerText = info.resumeName || "Not uploaded";
+            }
+
+            // Restore saved photo
+            var savedPhoto = localStorage.getItem("s_profilePhoto");
+            if (savedPhoto) {
+                document.getElementById("s_panelPhotoImg").src = savedPhoto;
+                document.getElementById("s_panelPhotoImg").style.display = "block";
+                document.getElementById("s_panelPhotoIcon").style.display = "none";
+                // Also update the top-right profile circle
+                document.getElementById("s_profileCircle").style.backgroundImage = "url('" + savedPhoto + "')";
+                document.getElementById("s_profileCircle").style.backgroundSize = "cover";
+            }
+
+            document.getElementById("s_profilePanel").classList.add("open");
+            document.getElementById("s_panelBackdrop").classList.add("open");
+        }
+
+        function s_closeProfilePanel() {
+            document.getElementById("s_profilePanel").classList.remove("open");
+            document.getElementById("s_panelBackdrop").classList.remove("open");
+        }
+
+
+        // =================== Change Profile Photo ===================
+        function s_changePhoto(input) {
+            if (!input.files || !input.files[0]) return;
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var dataUrl = e.target.result;
+
+                // Show in panel
+                document.getElementById("s_panelPhotoImg").src = dataUrl;
+                document.getElementById("s_panelPhotoImg").style.display = "block";
+                document.getElementById("s_panelPhotoIcon").style.display = "none";
+
+                // Update top-right profile circle
+                var circle = document.getElementById("s_profileCircle");
+                circle.style.backgroundImage = "url('" + dataUrl + "')";
+                circle.style.backgroundSize = "cover";
+                circle.style.backgroundPosition = "center";
+
+                // Save to localStorage
+                localStorage.setItem("s_profilePhoto", dataUrl);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+
+        // =================== On Page Load ===================
+        // Show home page by default and update the counts
+        s_updateAppliedCount();
+
+    </script>
+
+</body>
+
+</html>
