@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+<style>
+    .maincontainer {
+        height: 100vh;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(196, 191, 191);
+
+
+    }
+
+    .container {
+        width: 400px;
+        height: 400px;
+        background-color: white;
+        border-radius: 10px;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    h1 {
+        text-transform: uppercase;
+        font-size: 2rem;
+    }
+
+    p,
+    label {
+        font-size: 1.5rem;
+    }
+
+    button {
+        color: white;
+        background-color: green;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 5px 5px black;
+        transition: transform 0.1s, box-shadow 0.1s;
+        gap: 15px;
+
+
+    }
+
+    button:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px var(--black);
+    }
+
+    input {
+        padding: 5px;
+        border-radius: 10px;
+    }
+</style>
+
+<body>
+    <div class="maincontainer">
+        <div class="container">
+            <div>
+                <h1>login Page</h1>
+            </div>
+            <div class="loginoptions" id="loginoptions">
+                <p>Already have a account</p>
+                <button type="button" onclick="showlogin()">Login</button>
+                <br>
+                <p>Don't have an account?</p>
+                <button type="button" onclick="showsignup()">Sign Up</button>
+            </div>
+            <div class="login" id="login" style="display: none">
+
+                <label for="">Email</label>
+                <input type="email" placeholder=" Enter Your Email">
+                <br>
+                <label for="">Password</label>
+                <input type="text" placeholder=" Enter Your Password">
+
+                <br><br>
+                <button type="button">Login</button>
+                <br><br>
+                <button type="button" onclick="backbutton()" class="backbtn">Back</button>
+
+            </div>
+            <div class="singup" id="signup" style="display: none;">
+                <label for="">Email</label>
+                <input type="email" placeholder=" Enter Your Email">
+                <br>
+                <label for="">Password</label>
+                <input type="text" placeholder=" Enter Your Password">
+                <br><br>
+                <button type="button">Sign Up</button>
+                <br><br>
+                <button type="button" onclick="backbutton()" class="backbtn">Back</button>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <script>
+        function hideforms() {
+            document.getElementById("login").style.display = "none";
+            document.getElementById("signup").style.display = "none";
+
+
+        }
+        function showlogin() {
+            hideforms()
+            document.getElementById("login").style.display = "block";
+            document.getElementById("loginoptions").style.display = "none";
+
+
+        }
+        function showsignup() {
+            hideforms()
+            document.getElementById("signup").style.display = "block";
+            document.getElementById("loginoptions").style.display = "none";
+
+
+        }
+        function backbutton() {
+            document.getElementById("loginoptions").style.display = "block";
+
+
+            document.getElementById("signup").style.display = "none";
+            document.getElementById("login").style.display = "none";
+
+
+
+        }
+
+    </script>
+
+</body>
+
+</html>

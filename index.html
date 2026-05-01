@@ -236,7 +236,7 @@
             let found = students.find(s => s.username === username && s.password === password);
 
             if (found) {
-                showMsg("student_login_msg", "Login successful! Welcome.", false);
+                showMsg("student_login_msg", "Login successful! Welcome.",false);
                 setTimeout(() => {
                     window.location.href = "student_main.html";
                 }, 1000);

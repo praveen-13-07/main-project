@@ -1696,9 +1696,12 @@ textarea:focus {
     padding-bottom: 10px;
     border-bottom: var(--border);
 }
-.post-job-form ,.manage-jobs-list{
+
+.post-job-form,
+.manage-jobs-list {
     margin-left: 25px;
 }
+
 
 /* ===== MOBILE RESPONSIVENESS ===== */
 
@@ -1714,6 +1717,19 @@ textarea:focus {
     .sidebar.active {
         left: 0;
     }
+
+
+    .top-navbar {
+        position: relative;
+        z-index: 1200;
+    }
+
+    .menu-toggle {
+        position: relative;
+        z-index: 1300;
+    }
+
+
 
     /* Main content - full width always on mobile */
     .sidebar.active~.main-content {
@@ -1888,5 +1904,5 @@ textarea:focus {
         padding: 12px 16px;
         font-size: 0.85rem;
     }
-}
 
+}
